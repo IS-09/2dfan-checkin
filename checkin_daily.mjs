@@ -45,6 +45,7 @@ const EXIT = {
   ERR_UNVERIFIED: 5,
   ERR_CAPTCHA: 6,
   ERR_NET: 7,
+  ERR_UI: 8,
 };
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -211,8 +212,14 @@ async function main() {
       site.loadCookies();
     }
 
-    const captchaBlocked = r.reason === 'timeout' || r.reason === 'no-button';
-    outcome = { path: 'browser', captcha: captchaBlocked, last: r };
+    // timeout 多半是验证码没过去；no-button 是页面没渲染出来——两者要分开记，
+    // 否则"找不到按钮"会被误报成验证码问题，带偏排查方向。
+    outcome = {
+      path: 'browser',
+      captcha: r.reason === 'timeout',
+      ui: r.reason === 'no-button',
+      last: r,
+    };
 
     if (!r.ok) {
       log.error('浏览器签到未成功', {
@@ -252,6 +259,18 @@ async function main() {
     log.warn('签到未成功且站点处于 cooldown，可能需等次日重置后再签', { cooldown_at: status.cooldown_at });
     record(state, 'ERR_COOLDOWN', { via: outcome.path, cooldown_at: status.cooldown_at });
     return EXIT.ERR_COOLDOWN;
+  }
+
+  if (outcome.ui) {
+    log.error('页面结构异常：始终找不到签到按钮（已存快照到 debug/）', {
+      snapshot: outcome.last?.snapshot ? path.basename(outcome.last.snapshot) : null,
+      headedTried: !!outcome.last?.headedTried,
+    });
+    record(state, 'ERR_UI', {
+      via: outcome.path,
+      snapshot: outcome.last?.snapshot ? path.basename(outcome.last.snapshot) : null,
+    });
+    return EXIT.ERR_UI;
   }
 
   if (outcome.captcha) {

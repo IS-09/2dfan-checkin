@@ -150,6 +150,7 @@ schtasks /Run /TN 2DFan-DailyCheckin    # 立刻用任务上下文试跑
 | `ERR_COOLDOWN` | 4 | 站点处于 cooldown 且未能签上（通常等次日重置） |
 | `ERR_UNVERIFIED` | 5 | 提交了但复核仍显示未签到 |
 | `ERR_CAPTCHA` | 6 | 拿不到验证码 token（Turnstile 未自动通过） |
+| `ERR_UI` | 8 | 页面始终没渲染出签到按钮（零点重置期站点变慢的典型表现），已存快照 |
 | `ERR_NET` / `ERR_UNKNOWN` | 7 / 1 | 网络或未预期异常 |
 
 ## 常用命令
@@ -186,6 +187,7 @@ powershell -ExecutionPolicy Bypass -File .\uninstall_task.ps1
 |---|---|
 | `未拿到 Turnstile token` | 看 `debug\` 里的快照确认页面状态；站点风控可能升级 |
 | 反复 `ERR_AUTH` | Cookie 失效，跑 `node login_once.mjs` |
+| `ERR_UI` | 页面没渲染出签到按钮，多为零点重置期站点变慢。脚本已内置“轮询 30s + 重载再等”的等待逻辑；仍失败就看 `debug\` 快照 |
 | 大量 `连接 x.x.x.x 失败` | DoH 或该 IP 不可达，脚本会自动换 IP 重试 |
 | `LastTaskResult` 非 0 | 对照上表退出码，再查 `logs\当天日期.log` |
 | 想确认是否真签上 | 看 `state.json` 的 `last.result` 是否为 `OK_SIGNED` / `OK_ALREADY` |
