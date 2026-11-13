@@ -1,0 +1,17 @@
+{
+  "site": "https://2dfan.com",
+  "login": "your-account@example.com",
+  "password_dpapi": "",
+  "schedule": {
+    "hour": 0,
+    "minute": 5
+  },
+  "max_attempts": 3,
+  "retry_delay_ms": 15000,
+  "notify_failures": 2,
+  "browser": {
+    "channel": "chrome",
+    "headless_first": true
+  },
+  "headed_fallback": true
+}

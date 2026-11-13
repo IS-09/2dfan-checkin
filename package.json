@@ -1,0 +1,10 @@
+﻿{
+  "name": "2dfan-checkin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "2DFan daily auto check-in (HTTP first, headless Chrome fallback)",
+  "dependencies": {
+    "playwright-core": "^1.65.0"
+  }
+}

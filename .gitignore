@@ -1,0 +1,22 @@
+# 运行时产物与凭据（绝不入库）
+node_modules/
+.npm-cache/
+
+# 会话与配置：含账号、密码密文、Cookie、浏览器会话
+config.json
+cookies.json
+state.json
+
+# 浏览器持久化配置（内含登录态与 Cloudflare clearance）
+.chrome-profile/
+.chrome-profile-tmp/
+
+# 运行产物
+logs/
+debug/
+*.log
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+desktop.ini
