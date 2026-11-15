@@ -26,7 +26,7 @@ token 由站点 Vue 组件动态 `window.turnstile.render()` 生成，只存在�
 ## 工作原理
 
 ```
-Windows 计划任务（00:05 / 00:35 / 09:05 / 12:05 / 18:05 / 登录后 2 分钟）
+Windows 计划任务（00:05 / 00:35 / 09:05 / 12:05 / 18:05 / 22:00 / 登录后 2 分钟）
    └─ node checkin_daily.mjs
         ├─ DoH 解析真实 IP → 按 IP+SNI 直连
         ├─ GET /checkin/status.json

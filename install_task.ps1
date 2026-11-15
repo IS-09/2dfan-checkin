@@ -1,5 +1,5 @@
 ﻿# 2DFan 每日自动签到 —— 注册 Windows 计划任务
-# 触发：每日 00:05、00:35、09:05、12:05、18:05（多次补跑），以及登录后 2 分钟（补跑）
+# 触发：每日 00:05、00:35、09:05、12:05、18:05、22:00（多次补跑），以及登录后 2 分钟（补跑）
 # 脚本本身幂等：已签到直接退出，所以多触发不会重复签到。
 #
 # 运行：右键「使用 PowerShell 运行」，或在 PowerShell 里执行
@@ -36,12 +36,13 @@ $Start2 = $Today.Date.AddDays(1).AddHours(0).AddMinutes(35)
 $Start3 = $Today.Date.AddDays(1).AddHours(9).AddMinutes(5)
 $Start4 = $Today.Date.AddDays(1).AddHours(12).AddMinutes(5)
 $Start5 = $Today.Date.AddDays(1).AddHours(18).AddMinutes(5)
+$Start6 = $Today.Date.AddDays(1).AddHours(22)
 
 $Xml = @"
 <?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Description>2DFan 每日自动签到（00:05 主触发，凌晨/上午/中午/傍晚多次补跑；脚本幂等）</Description>
+    <Description>2DFan 每日自动签到（00:05 主触发，凌晨/上午/中午/傍晚/夜间多次补跑；脚本幂等）</Description>
     <URI>\$TaskName</URI>
   </RegistrationInfo>
   <Triggers>
@@ -67,6 +68,11 @@ $Xml = @"
     </CalendarTrigger>
     <CalendarTrigger>
       <StartBoundary>$($Start5.ToString('yyyy-MM-ddTHH:mm:ss'))</StartBoundary>
+      <Enabled>true</Enabled>
+      <ScheduleByDay><DaysInterval>1</DaysInterval></ScheduleByDay>
+    </CalendarTrigger>
+    <CalendarTrigger>
+      <StartBoundary>$($Start6.ToString('yyyy-MM-ddTHH:mm:ss'))</StartBoundary>
       <Enabled>true</Enabled>
       <ScheduleByDay><DaysInterval>1</DaysInterval></ScheduleByDay>
     </CalendarTrigger>
